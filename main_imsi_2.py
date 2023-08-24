@@ -49,7 +49,9 @@ def run_backtest(df):
     bt = Backtest(df, EmaCrossoverStrategy, cash=10000, commission=.00075, trade_on_close=True, exclusive_orders=True, hedging=False)
     stats = bt.run()
     df = pd.DataFrame(stats, columns=["VAL"])
-    df.reset_index(inplace=True)
+    df = df.transpose()
+    df.rename(columns=df.iloc[0], inplace=True) # 행열이 전환된 데이터프레임의 열 이름 제대로 수정
+    df = df.drop(df.index[0])
     st.dataframe(df)
 
     st.bokeh_chart(bt.plot())
